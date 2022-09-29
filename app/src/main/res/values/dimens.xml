@@ -1,2 +1,8 @@
 <resources>
+    <dimen name="margin_extra_small">4dp</dimen>
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_medium">12dp</dimen>
+
+    <dimen name="item_height_album">200dp</dimen>
+    <dimen name="item_height_media">100dp</dimen>
 </resources>

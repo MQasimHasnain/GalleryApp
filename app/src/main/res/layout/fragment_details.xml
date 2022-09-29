@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 <androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/albumsListView"
+    android:id="@+id/mediaListView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="@dimen/margin_extra_small"

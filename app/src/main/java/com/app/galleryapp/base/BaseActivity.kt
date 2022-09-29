@@ -10,6 +10,9 @@ import java.util.*
 
 abstract class BaseActivity<VB : ViewBinding> : FragmentActivity(), BaseFragment.FragmentNavigationHelper{
 
+    var actionOnPermission: ((granted: Boolean) -> Unit)? = null
+    var isAskingPermissions = false
+
     lateinit var binding: VB
 
     private var currFragment: Fragment? = null

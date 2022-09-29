@@ -1,24 +1,41 @@
 package com.app.galleryapp.features.home.view
 
-import androidx.appcompat.app.AppCompatActivity
+import android.Manifest
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import com.app.galleryapp.R
 import com.app.galleryapp.base.BaseActivity
 import com.app.galleryapp.databinding.ActivityMainBinding
+import com.app.galleryapp.utils.ManagePermissions
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>() {
 
+    private val PermissionsRequestCode = 123
+    private lateinit var managePermissions: ManagePermissions
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setActionBar(binding.toolbar)
-        addFragment(AlbumsFragment.newInstance(),
-            R.id.container,
-            clearBackStack = true,
-            addToBackStack = true)
+
+        val list = listOf<String>(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+
+        managePermissions = ManagePermissions(this,list,PermissionsRequestCode)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            if(managePermissions.checkPermissions()){
+                addFragment(
+                    AlbumsFragment.newInstance(),
+                    R.id.container,
+                    clearBackStack = true,
+                    addToBackStack = true)
+            }
     }
 
     override fun getLayoutRes(): Int {
@@ -35,5 +52,19 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override fun getViewBinging(): ActivityMainBinding {
         return ActivityMainBinding.inflate(layoutInflater)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if(managePermissions.processPermissionsResult(requestCode, permissions, grantResults)){
+            addFragment(
+                AlbumsFragment.newInstance(),
+                R.id.container,
+                clearBackStack = true,
+                addToBackStack = true)
+        }else{
+            finish()
+        }
     }
 }
