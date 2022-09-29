@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.app.galleryapp.R
 import com.app.galleryapp.base.BaseViewHolder
 import com.app.galleryapp.features.details.model.MediaItem
+import com.app.galleryapp.utils.MEDIA_TYPE
 import com.bumptech.glide.Glide
 import java.lang.Exception
 
@@ -40,10 +41,16 @@ class AlbumDetailsAdapter(
 
     inner class AlbumsViewHolder(itemView : View) : BaseViewHolder(itemView){
         var itemImage = itemView.findViewById(R.id.itemImage) as ImageView
+        var videoIcon = itemView.findViewById(R.id.videoIcon) as ImageView
 
         override fun bind(item: Any, position: Int, listener: (position: Int) -> Unit) {
             item?.let {
                 val mediaItem = item as MediaItem
+                if(mediaItem.itemType == MEDIA_TYPE.VIDEO_MEDIA){
+                    videoIcon?.visibility = View.VISIBLE
+                }else{
+                    videoIcon?.visibility = View.GONE
+                }
                 try {
                     itemView?.context?.let {
                         Glide.with(it)

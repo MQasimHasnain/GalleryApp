@@ -13,13 +13,19 @@ import com.bumptech.glide.Glide
 import java.lang.Exception
 
 class AlbumsGridAdapter(
-    private var mediaList : MutableList<MediaAlbumItem>,
+    var mediaList : MutableList<MediaAlbumItem>,
     private val albumsListener: (MediaAlbumItem) -> Unit
 ) : RecyclerView.Adapter<AlbumsGridAdapter.AlbumsViewHolder>() {
+    private var layoutResource : Int = R.layout.item_album_grid
+
+    fun setLayoutResource(res : Int){
+        layoutResource = res
+
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumsViewHolder {
         val inflater: LayoutInflater = LayoutInflater.from(parent.context)
-        val view: View = inflater.inflate(R.layout.item_album_grid, parent, false)
+        val view: View = inflater.inflate(layoutResource, parent, false)
         return AlbumsViewHolder(view)
     }
 

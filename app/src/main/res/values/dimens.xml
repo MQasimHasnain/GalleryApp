@@ -4,5 +4,7 @@
     <dimen name="margin_medium">12dp</dimen>
 
     <dimen name="item_height_album">200dp</dimen>
+    <dimen name="item_height_album_list">80dp</dimen>
     <dimen name="item_height_media">100dp</dimen>
+    <dimen name="text_gradient_height">60dp</dimen>
 </resources>

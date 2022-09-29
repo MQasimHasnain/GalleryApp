@@ -3,6 +3,7 @@ package com.app.galleryapp.features.home.view
 import android.os.Bundle
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.galleryapp.R
 import com.app.galleryapp.base.BaseFragment
 import com.app.galleryapp.databinding.FragmentAlbumsBinding
@@ -17,6 +18,7 @@ class AlbumsFragment : BaseFragment<FragmentAlbumsBinding>(){
 
     lateinit var albumsGridAdapter: AlbumsGridAdapter
     private val albumsViewModel : AlbumsViewModel by viewModels()
+    private var albumsList : ArrayList<MediaAlbumItem> = ArrayList()
 
     companion object {
         fun newInstance() = AlbumsFragment()
@@ -38,7 +40,7 @@ class AlbumsFragment : BaseFragment<FragmentAlbumsBinding>(){
 
     private fun initView(){
         (activity as? MainActivity)?.showProgressBar()
-        albumsGridAdapter = AlbumsGridAdapter(mutableListOf(), ::onAlbumClicked)
+        albumsGridAdapter = AlbumsGridAdapter(albumsList, ::onAlbumClicked)
         binding.albumsListView.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.albumsListView.adapter = albumsGridAdapter
     }
@@ -46,6 +48,8 @@ class AlbumsFragment : BaseFragment<FragmentAlbumsBinding>(){
     private fun getContent(){
         albumsViewModel?.albumsListData?.observe(viewLifecycleOwner){
             it?.let {
+                albumsList?.clear()
+                albumsList?.addAll(it)
                 albumsGridAdapter?.setData(it)
                 (activity as? MainActivity)?.hideProgressBar()
             }
@@ -56,6 +60,22 @@ class AlbumsFragment : BaseFragment<FragmentAlbumsBinding>(){
 
     private fun onAlbumClicked(item : MediaAlbumItem){
         launchDetailsScreen(item)
+    }
+
+    fun switchView(isGridView : Boolean){
+        if (isGridView){
+            albumsGridAdapter = AlbumsGridAdapter(albumsList, ::onAlbumClicked)
+            binding.albumsListView.layoutManager = GridLayoutManager(requireContext(), 2)
+            binding.albumsListView.adapter = albumsGridAdapter
+            albumsGridAdapter?.notifyDataSetChanged()
+
+        }else{
+            albumsGridAdapter = AlbumsGridAdapter(albumsList, ::onAlbumClicked)
+            albumsGridAdapter?.setLayoutResource(R.layout.item_album_list)
+            binding.albumsListView.layoutManager = LinearLayoutManager(requireContext())
+            binding.albumsListView.adapter = albumsGridAdapter
+            albumsGridAdapter?.notifyDataSetChanged()
+        }
     }
 
     private fun launchDetailsScreen(item : MediaAlbumItem){

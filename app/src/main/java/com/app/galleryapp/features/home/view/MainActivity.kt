@@ -3,6 +3,8 @@ package com.app.galleryapp.features.home.view
 import android.Manifest
 import android.os.Build
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import com.app.galleryapp.R
 import com.app.galleryapp.base.BaseActivity
@@ -15,6 +17,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private val PermissionsRequestCode = 123
     private lateinit var managePermissions: ManagePermissions
+    private var isGridView : Boolean = true
+    private lateinit var fragment : AlbumsFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,8 +34,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             if(managePermissions.checkPermissions()){
+                fragment = AlbumsFragment.newInstance()
                 addFragment(
-                    AlbumsFragment.newInstance(),
+                    fragment,
                     R.id.container,
                     clearBackStack = true,
                     addToBackStack = true)
@@ -54,12 +59,32 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         return ActivityMainBinding.inflate(layoutInflater)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.custom_menu, menu);
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId){
+            R.id.switch_view ->{
+                isGridView = !isGridView
+                fragment?.let {
+                    if (it.isAdded){
+                        it.switchView(isGridView)
+                    }
+                }
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         if(managePermissions.processPermissionsResult(requestCode, permissions, grantResults)){
+            fragment = AlbumsFragment.newInstance()
             addFragment(
-                AlbumsFragment.newInstance(),
+                fragment,
                 R.id.container,
                 clearBackStack = true,
                 addToBackStack = true)

@@ -39,7 +39,7 @@ class AlbumDetailsRepositoryImp : AlbumDetailsRepository {
                     val contentUri: Uri = ContentUris.withAppendedId(
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                         id)
-                    mediaList += MediaItem(id, name, contentUri)
+                    mediaList += MediaItem(id, name, MEDIA_TYPE.VIDEO_MEDIA, contentUri)
                 }
                 cursor?.close()
             }
@@ -72,7 +72,7 @@ class AlbumDetailsRepositoryImp : AlbumDetailsRepository {
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                         id
                     )
-                    mediaList += MediaItem(id, name, contentUri)
+                    mediaList += MediaItem(id, name, MEDIA_TYPE.PHOTO_MEDIA, contentUri)
                 }
 
                 cursor?.close()
