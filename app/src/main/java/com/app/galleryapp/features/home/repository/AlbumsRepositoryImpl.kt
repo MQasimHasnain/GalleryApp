@@ -106,10 +106,9 @@ class AlbumsRepositoryImpl : AlbumsRepository {
         }
 
         images.forEach {
-            val last = albums.lastOrNull()
-            if (last?.itemId == it.itemId) {
-                last.count++
-            } else {
+            albums?.find { a -> a.itemId == it.itemId }?.let { b ->
+                b.count++
+            }?: kotlin.run {
                 albums.add(MediaAlbumItem(it.itemId,
                     it.title,
                     MEDIA_TYPE.PHOTO_MEDIA,
